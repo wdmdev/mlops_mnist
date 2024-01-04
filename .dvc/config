@@ -1,0 +1,4 @@
+[core]
+    remote = dtu_hpc
+['remote "dtu_hpc"']
+    url = ssh://s183921@transfer.gbar.dtu.dk:/work1/s183921
