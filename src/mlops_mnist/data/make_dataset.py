@@ -30,7 +30,7 @@ def create_dataset(image_files, target_files, data_path):
 
 def mnist():
     """Return train and test dataloaders for MNIST."""
-    data_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "data", "corruptmnist")
+    data_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "data", "raw", "corruptmnist")
 
     # Create file name lists
     train_image_files = [f"train_images_{i}.pt" for i in range(6)]
