@@ -32,6 +32,7 @@ def train(lr):
     train_image_tensors = torch.load(os.path.join(base_path, "train_images.pt"))
     train_target_tensors = torch.load(os.path.join(base_path, "train_targets.pt"))
     train_set = CustomDataset(train_image_tensors, train_target_tensors)
+    train_loader = DataLoader(train_set, batch_size=64, shuffle=True)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = torch.nn.CrossEntropyLoss()
@@ -43,7 +44,7 @@ def train(lr):
 
     for e in tqdm(range(epochs)):
         running_loss = 0
-        for images, labels in train_set:
+        for images, labels in train_loader:
             steps += 1
 
             optimizer.zero_grad()
@@ -54,7 +55,7 @@ def train(lr):
             optimizer.step()
 
             running_loss += loss.item()
-            train_losses.append(running_loss / len(train_set))
+            train_losses.append(running_loss / len(train_loader))
 
     # Save plot of training loss in current folder
     plot_path = os.path.join(os.path.dirname(__file__), "..", "..", "reports", "figures", "training_loss.png")

@@ -44,6 +44,10 @@ data: requirements
 train_image:
 	docker build -f dockerfiles/trainer.dockerfile . -t trainer:latest
 
+## Train model
+train: train_image
+	docker run --name $(NAME) -v $(PWD)/models:/models -v $(PWD)/data:/data -v $(PWD)/reports:/reports trainer:latest
+
 
 #################################################################################
 # Documentation RULES                                                           #
