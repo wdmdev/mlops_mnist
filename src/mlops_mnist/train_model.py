@@ -5,6 +5,20 @@ import torch
 from tqdm import tqdm
 
 from models.model import MyNeuralNet
+from torch.utils.data import DataLoader, Dataset
+
+class CustomDataset(Dataset):
+    def __init__(self, image_tensors, target_tensors):
+        self.images = image_tensors
+        self.labels = target_tensors
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, idx):
+        x = self.images[idx].unsqueeze(0)
+        y = self.labels[idx]
+        return x, y
 
 
 def train(lr):
@@ -13,7 +27,11 @@ def train(lr):
     print(lr)
 
     model = MyNeuralNet()
-    train_set = torch.load(os.path.join(os.path.dirname(__file__), "..", "data", "processed", "train_loader.pt"))
+
+    base_path = os.path.join("data", "processed")
+    train_image_tensors = torch.load(os.path.join(base_path, "train_images.pt"))
+    train_target_tensors = torch.load(os.path.join(base_path, "train_targets.pt"))
+    train_set = CustomDataset(train_image_tensors, train_target_tensors)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = torch.nn.CrossEntropyLoss()
@@ -39,13 +57,13 @@ def train(lr):
             train_losses.append(running_loss / len(train_set))
 
     # Save plot of training loss in current folder
-    plot_path = os.path.join(os.path.dirname(__file__), "..", "reports", "figures", "training_loss.png")
+    plot_path = os.path.join(os.path.dirname(__file__), "..", "..", "reports", "figures", "training_loss.png")
     plt.plot(train_losses, label="Training loss")
     plt.legend(frameon=False)
     plt.savefig(plot_path)
 
     # Save model
-    torch.save(model, os.path.join(os.path.dirname(__file__), "..", "models", "model.pt"))
+    torch.save(model, os.path.join(os.path.dirname(__file__), "..", "..", "models", "model.pt"))
 
 
 if __name__ == "__main__":

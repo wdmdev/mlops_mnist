@@ -40,6 +40,11 @@ clean:
 data: requirements
 	$(PYTHON_INTERPRETER) src/$(PROJECT_NAME)/data/make_dataset.py
 
+## Build docker image
+train_image:
+	docker build -f dockerfiles/trainer.dockerfile . -t trainer:latest
+
+
 #################################################################################
 # Documentation RULES                                                           #
 #################################################################################
